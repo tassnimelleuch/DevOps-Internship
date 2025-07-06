@@ -1,62 +1,50 @@
 #!/usr/bin/env python3
 """
-Simple script to check the SQLite database contents
+Database checker for Flask Todo App
 """
 
 import sqlite3
 import os
+import sys
+
+# Add the app directory to the Python path
+sys.path.append(os.path.join(os.path.dirname(__file__), 'app'))
+
+from app import create_app
+from app.models import Task
 
 def check_database():
-    # Path to the database file
-    db_path = os.path.join('app', 'instance', 'app.db')
+    """Check database contents"""
+    print("=" * 50)
+    print("DATABASE CHECK")
+    print("=" * 50)
     
-    if not os.path.exists(db_path):
-        print(f"Database file not found at: {db_path}")
-        return
+    # Check with Flask-SQLAlchemy
+    app = create_app()
     
-    print(f"Database file found at: {db_path}")
-    print(f"File size: {os.path.getsize(db_path)} bytes")
-    print("-" * 50)
-    
-    # Connect to the database
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    
-    # Get table information
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    tables = cursor.fetchall()
-    
-    print("Tables in database:")
-    for table in tables:
-        print(f"  - {table[0]}")
-    
-    print("-" * 50)
-    
-    # Check the task table
-    if ('task',) in tables:
-        print("Task table contents:")
-        cursor.execute("SELECT * FROM task;")
-        tasks = cursor.fetchall()
+    with app.app_context():
+        tasks = Task.query.all()
+        
+        print(f"📊 Total tasks: {len(tasks)}")
         
         if tasks:
-            print(f"Total tasks: {len(tasks)}")
-            print("\nTask details:")
+            print("\n📋 Task details:")
             for task in tasks:
-                print(f"  ID: {task[0]}, Content: '{task[1]}', Done: {task[2]}")
+                status = "✓ Done" if task.done else "○ Pending"
+                print(f"   ID: {task.id:2d} | {status} | {task.content}")
         else:
-            print("No tasks found in the database.")
-    else:
-        print("Task table not found.")
+            print("\n📝 No tasks found in the database.")
+            print("   💡 Try adding some tasks through the web interface!")
+        
+        # Show statistics
+        done_tasks = Task.query.filter_by(done=True).count()
+        pending_tasks = Task.query.filter_by(done=False).count()
+        
+        print(f"\n📈 Statistics:")
+        print(f"   ✓ Completed tasks: {done_tasks}")
+        print(f"   ○ Pending tasks: {pending_tasks}")
     
-    # Show table schema
-    print("-" * 50)
-    print("Task table schema:")
-    cursor.execute("PRAGMA table_info(task);")
-    columns = cursor.fetchall()
-    for col in columns:
-        print(f"  {col[1]} ({col[2]}) - {'NOT NULL' if col[3] else 'NULL'} - Default: {col[4]}")
-    
-    conn.close()
+    print(f"\n📁 Database location: app/instance/app.db")
 
 if __name__ == "__main__":
     check_database() 
