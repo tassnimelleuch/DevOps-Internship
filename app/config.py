@@ -1,10 +1,12 @@
 import os
 
-class Config:
-    """Base configuration class."""
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key'
 
+class Config:
+    # This MUST match exactly
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(
+        os.path.dirname(__file__), 'instance', 'app.db'
+    )
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 class DevelopmentConfig(Config):
     """Development configuration."""
     DEBUG = True

@@ -1,0 +1,24 @@
+{% extends "base.html" %}  <!-- Assuming you have a base template -->
+{% block content %}
+<div class="summarize-container">
+    <h2 class="summarize-title"><i class="fas fa-align-left"></i> Text Summarizer</h2>
+    <form id="summarizeForm" method="POST" action="{{ url_for('summarize.summarize') }}">
+        <textarea name="text" class="summarize-textarea big-textarea" rows="14" placeholder="Paste or type your text here..." required></textarea>
+        <button type="submit" class="summarize-submit-btn big-blue-btn"><i class="fas fa-magic"></i> Summarize</button>
+    </form>
+    <div id="summaryResult" class="summary-result"></div>
+    <a href="{{ url_for('main.index') }}" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Tasks</a>
+</div>
+<script>
+    document.getElementById('summarizeForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const response = await fetch("{{ url_for('summarize.summarize') }}", {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+        document.getElementById('summaryResult').innerText = data.summary;
+    });
+</script>
+{% endblock %}

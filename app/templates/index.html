@@ -29,13 +29,12 @@
                 <li class="task-item {{ 'completed' if task.done else '' }}">
                     <span class="task-content">{{ task.content }}</span>
                     <div class="task-actions">
-                        <a href="{{ url_for('edit', id=task.id) }}" class="edit-btn" title="Edit">
-                            <i class="fas fa-edit"></i>
+                    <a href="{{ url_for('main.edit', id=task.id) }}" class="edit-btn" title="Edit">                            <i class="fas fa-edit"></i>
                         </a>
-                        <a href="{{ url_for('toggle', id=task.id) }}" class="toggle-btn" title="{{ 'Mark undone' if task.done else 'Complete' }}">
+                        <a href="{{ url_for('main.toggle', id=task.id) }}" class="toggle-btn" title="{{ 'Mark undone' if task.done else 'Complete' }}">
                             <i class="fas {{ 'fa-undo' if task.done else 'fa-check' }}"></i>
                         </a>
-                        <a href="{{ url_for('delete', id=task.id) }}" class="delete-btn" title="Delete">
+                        <a href="{{ url_for('main.delete', id=task.id) }}" class="delete-btn" title="Delete">
                             <i class="fas fa-trash"></i>
                         </a>
                     </div>
@@ -43,10 +42,18 @@
                 {% endfor %}
             </ul>
 
+           
+
             <!-- Stats -->
             <div class="task-stats">
                 <span>{{ tasks|length }} total tasks</span>
                 <span>{{ tasks|selectattr('done')|list|length }} completed</span>
+            </div>
+             <!-- Summarize Button -->
+             <div class="summarize-section" style="text-align:center; margin-top: 2rem;">
+                <a href="{{ url_for('summarize.summarize') }}" class="summarize-btn">
+                    <i class="fas fa-align-left"></i> Summarize Texts
+                </a>
             </div>
         </div>
     </div>
