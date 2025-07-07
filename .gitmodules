@@ -1,0 +1,3 @@
+[submodule "bart-large-cnn"]
+	path = bart-large-cnn
+	url = https://huggingface.co/facebook/bart-large-cnn
