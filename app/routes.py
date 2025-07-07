@@ -48,3 +48,22 @@ def toggle(id):
     task.done = not task.done
     db.session.commit()
     return redirect(url_for('main.index'))  # Fixed: added 'main.' prefix
+    
+@bp.route('/summarize', methods=['POST'])
+def summarize():
+    """Handle text summarization requests."""
+    if request.is_json:
+        text = request.json.get('text')
+    else:
+        text = request.form.get('text')
+    
+    if not text or not text.strip():
+        return jsonify({"error": "No text provided"}), 400
+    
+    try:
+        summary = get_summary(text)
+        if request.is_json:
+            return jsonify({"summary": summary})
+        return render_template('index.html', summary=summary)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

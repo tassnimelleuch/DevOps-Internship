@@ -1,5 +1,7 @@
 from transformers import pipeline
 
-def get_summary(text):
-    summarizer = pipeline("summarization", model="./bart-large-cnn")
-    return summarizer(text, max_length=130, min_length=30)[0]['summary_text']
+summarizer = pipeline('summarization', model='facebook/bart-large-cnn')
+
+def get_summary(text: str) -> str:
+    result = summarizer(text, max_length=130, min_length=30)
+    return result[0]['summary_text']  # type: ignore
