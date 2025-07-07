@@ -67,3 +67,7 @@ def summarize():
         return render_template('index.html', summary=summary)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@bp.route('/pomodoro')
+def pomodoro():
+    return render_template('pomodoro.html')

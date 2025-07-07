@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="pomodoro-container">
+    <h2 class="pomodoro-title"><i class="fas fa-clock"></i> Pomodoro Timer</h2>
+    <div class="pomodoro-options">
+        <button class="pomodoro-btn-option" onclick="setPomodoro(25)">25 min Work</button>
+        <button class="pomodoro-btn-option" onclick="setPomodoro(5)">5 min Break</button>
+    </div>
+    <div class="pomodoro-timer-display" id="timerDisplay">25:00</div>
+    <button class="pomodoro-start-btn" id="startBtn" onclick="startPomodoro()">Start</button>
+    <button class="pomodoro-reset-btn" id="resetBtn" onclick="resetPomodoro()">Reset</button>
+    <a href="{{ url_for('main.index') }}" class="back-btn" style="display:block; margin-top:2rem;"><i class="fas fa-arrow-left"></i> Back to Tasks</a>
+    <audio id="alarmSound" src="{{ url_for('static', filename='alarm.mp3') }}" preload="auto"></audio>
+</div>
+<script>
+    // Timer state persistence
+    let duration = 25 * 60;
+    let timer = duration;
+    let interval = null;
+    let running = false;
+    let endTime = null;
+
+    function saveState() {
+        localStorage.setItem('pomodoro_timer', JSON.stringify({
+            duration,
+            timer,
+            running,
+            endTime: endTime ? endTime.toISOString() : null
+        }));
+    }
+
+    function loadState() {
+        const state = JSON.parse(localStorage.getItem('pomodoro_timer'));
+        if (state) {
+            duration = state.duration;
+            timer = state.timer;
+            running = state.running;
+            endTime = state.endTime ? new Date(state.endTime) : null;
+            if (running && endTime) {
+                const now = new Date();
+                timer = Math.max(0, Math.round((endTime - now) / 1000));
+                if (timer > 0) {
+                    startPomodoro(true);
+                } else {
+                    timer = 0;
+                    running = false;
+                    playAlarm();
+                }
+            }
+            updateDisplay();
+        }
+    }
+
+    function setPomodoro(mins) {
+        if (running) return;
+        duration = mins * 60;
+        timer = duration;
+        endTime = null;
+        updateDisplay();
+        saveState();
+    }
+
+    function updateDisplay() {
+        const mins = String(Math.floor(timer / 60)).padStart(2, '0');
+        const secs = String(timer % 60).padStart(2, '0');
+        document.getElementById('timerDisplay').textContent = `${mins}:${secs}`;
+    }
+
+    function startPomodoro(resume=false) {
+        if (running) return;
+        running = true;
+        if (!resume) {
+            endTime = new Date(Date.now() + timer * 1000);
+        }
+        saveState();
+        interval = setInterval(() => {
+            if (timer > 0) {
+                timer--;
+                updateDisplay();
+                saveState();
+            } else {
+                clearInterval(interval);
+                running = false;
+                saveState();
+                playAlarm();
+            }
+        }, 1000);
+    }
+
+    function resetPomodoro() {
+        clearInterval(interval);
+        running = false;
+        timer = duration;
+        endTime = null;
+        updateDisplay();
+        saveState();
+    }
+
+    function playAlarm() {
+        const sound = document.getElementById('alarmSound');
+        if (sound) {
+            sound.currentTime = 0;
+            sound.play();
+        }
+        alert('Time is up!');
+    }
+
+    window.addEventListener('beforeunload', saveState);
+    updateDisplay();
+    loadState();
+</script>
+{% endblock %} 
