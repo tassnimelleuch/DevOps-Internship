@@ -14,10 +14,7 @@ TaskFlow is a modern productivity web app built with Flask. It helps you manage 
 ## 🚀 Quick Start
 
 ### 1. Clone the Repository
-```bash
-git clone https://github.com/yourusername/DevOps-Internship.git
-cd DevOps-Internship
-```
+
 
 ### 2. Install Python Requirements
 Make sure you have Python 3.8+ and pip installed.
@@ -40,11 +37,7 @@ Place a short sound file (e.g., `alarm.mp3`) in the `app/static/` directory. You
 ```bash
 python run.py
 ```
-Or, with Flask CLI:
-```bash
-export FLASK_APP=app
-flask run
-```
+
 
 ### 5. Open in Your Browser
 Go to [http://127.0.0.1:5000](http://127.0.0.1:5000)
@@ -58,20 +51,10 @@ Go to [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
 
-## 📝 .gitignore Suggestions
-Add these lines to your `.gitignore` to avoid committing model files:
-```
 # Hugging Face cache
 .cache/huggingface/
 models/
 ```
 
----
 
-## 📸 Screenshots
-*Add screenshots of your app here!*
-
----
-
-A modular Flask application for managing todo tasks.
 
