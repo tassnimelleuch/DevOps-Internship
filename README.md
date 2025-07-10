@@ -44,15 +44,16 @@ Go to [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
 
+## 📊 Code Quality Report  
+This project is analyzed by **SonarCloud** for bugs, vulnerabilities, and code smells. 
+Go to [https://sonarcloud.io/project/overview?id=tassnimelleuch_DevOps-Internship]
+
+
 ## 🤖 How the Summarizer Works
 - The first time you use the summarizer, the app will automatically download the `facebook/bart-large-cnn` model from Hugging Face (~1.5GB). This requires an internet connection.
 - The model is cached for future use (no repeated downloads).
 - No model files are stored in this repo.
 
 ---
-
-## 📊 Code Quality Report  
-This project is analyzed by **SonarCloud** for bugs, vulnerabilities, and code smells. 
-Go to [https://sonarcloud.io/project/overview?id=tassnimelleuch_DevOps-Internship]
 
 
