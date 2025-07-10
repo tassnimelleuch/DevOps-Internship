@@ -51,4 +51,8 @@ Go to [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
 
+## 📊 Code Quality Report  
+This project is analyzed by **SonarCloud** for bugs, vulnerabilities, and code smells. 
+Go to [https://sonarcloud.io/project/overview?id=tassnimelleuch_DevOps-Internship]
+
 
