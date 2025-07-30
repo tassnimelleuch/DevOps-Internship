@@ -10,7 +10,7 @@ import sys
 # Add the app directory to the Python path
 sys.path.append(os.path.join(os.path.dirname(__file__), 'app'))
 
-from app import create_app
+from app import create_app , db
 from app.models import Task
 
 def check_database():
@@ -23,6 +23,8 @@ def check_database():
     app = create_app()
     
     with app.app_context():
+        db.create_all()
+        print("✅ Database tables created!")
         tasks = Task.query.all()
         
         print(f"📊 Total tasks: {len(tasks)}")

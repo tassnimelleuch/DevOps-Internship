@@ -1,12 +1,13 @@
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 from .models import db, Task
+from app.summarize import get_summary 
 
 bp = Blueprint('main', __name__)
 
 @bp.route('/')
 def index():
     """Display all tasks."""
-    tasks = Task.query.all()
+    tasks = db.session.execute(db.select(Task)).scalars().all()  # Modern SQLAlchemy 2.0 query
     return render_template('index.html', tasks=tasks)
 
 @bp.route('/add', methods=['POST'])
@@ -17,37 +18,45 @@ def add():
         new_task = Task(content=task_content)
         db.session.add(new_task)
         db.session.commit()
-    return redirect(url_for('main.index'))  # Fixed: added 'main.' prefix
+    return redirect(url_for('main.index'))
 
 @bp.route('/edit/<int:id>', methods=['GET'])
 def edit(id):
     """Display edit form for a task."""
-    task = Task.query.get_or_404(id)
+    task = db.session.get(Task, id)  # Modern session.get() instead of query.get()
+    if not task:
+        abort(404)
     return render_template('edit.html', task=task)
 
 @bp.route('/update/<int:id>', methods=['POST'])
 def update(id):
     """Update an existing task."""
-    task = Task.query.get_or_404(id)
+    task = db.session.get(Task, id)
+    if not task:
+        abort(404)
     task.content = request.form['content']
     db.session.commit()
-    return redirect(url_for('main.index'))  # Fixed: added 'main.' prefix
+    return redirect(url_for('main.index'))
 
 @bp.route('/delete/<int:id>')
 def delete(id):
     """Delete a task."""
-    task_to_delete = Task.query.get_or_404(id)
-    db.session.delete(task_to_delete)
+    task = db.session.get(Task, id)
+    if not task:
+        abort(404)
+    db.session.delete(task)
     db.session.commit()
-    return redirect(url_for('main.index'))  # Fixed: added 'main.' prefix
+    return redirect(url_for('main.index'))
 
 @bp.route('/toggle/<int:id>')
 def toggle(id):
     """Toggle the done status of a task."""
-    task = Task.query.get_or_404(id)
+    task = db.session.get(Task, id)
+    if not task:
+        abort(404)
     task.done = not task.done
     db.session.commit()
-    return redirect(url_for('main.index'))  # Fixed: added 'main.' prefix
+    return redirect(url_for('main.index'))
     
 @bp.route('/summarize', methods=['POST'])
 def summarize():
