@@ -1,16 +1,16 @@
 import pytest
 from app.models import db, Task
 from flask import Flask
-
-# filepath: c:\Users\TASNIM\Desktop\FLASKAPP\DevOps-Internship\tests\test_models.py
-
+import warnings
 
 @pytest.fixture
 def app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['TESTING'] = True
     db.init_app(app)
+    
     with app.app_context():
         db.create_all()
         yield app
@@ -21,6 +21,7 @@ def app():
 def session(app):
     with app.app_context():
         yield db.session
+        db.session.rollback()
 
 def test_task_creation(session):
     task = Task(content="Test Task")
@@ -48,7 +49,7 @@ def test_update_task_done(session):
     session.commit()
     task.done = True
     session.commit()
-    updated_task = Task.query.get(task.id)
+    updated_task = session.get(Task, task.id)  # SQLAlchemy 2.0 compatible
     assert updated_task.done is True
 
 def test_task_content_nullable(session):
