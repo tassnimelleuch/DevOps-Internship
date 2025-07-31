@@ -6,15 +6,17 @@ from app.models import Task
 def app():
     """Create and configure a new app instance for testing."""
     app = create_app()
-    app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF for testing
+    app.config.update({
+        'TESTING': True,
+        'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
+        'WTF_CSRF_ENABLED': False
+    })
     
-    # Push application context
     with app.app_context():
-        db.create_all()  # Create all tables
+        db.create_all()
         yield app
-        db.drop_all()  # Clean up
+        db.session.remove()
+        db.drop_all()
 
 @pytest.fixture
 def client(app):
@@ -31,3 +33,10 @@ def test_task(app):
         yield task
         db.session.delete(task)
         db.session.commit()
+
+@pytest.fixture
+def mock_summarizer():
+    """Mock the summarizer function for testing."""
+    with patch('app.services.summarizer.get_summary') as mock:
+        mock.return_value = "Mocked summary"
+        yield mock
