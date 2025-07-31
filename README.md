@@ -20,18 +20,16 @@ TaskFlow is a modern productivity web app built with Flask. It helps you manage 
      ```sh
      pip install -r app/requirements.txt
      ```
-   - Required packages:
-     - Flask
-     - SQLAlchemy
-     - transformers
-     - torch
-     - sentencepiece
-3. **Add an Alarm Sound (for Pomodoro)**
-   - Place a short sound file (e.g., alarm.mp3) in the `app/static/` directory. You can use any `.mp3` file you like.
-4. **Run the App**
-   ```sh
-   python run.py
-   ```
+## 🚀 First Run
+
+**Before starting the application**, you must initialize the database:
+
+```bash
+# 1. Create the database tables
+python check_db.py
+
+# 2. Start the Flask application
+python run.py
 5. **Open in Your Browser**
    - Go to [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
