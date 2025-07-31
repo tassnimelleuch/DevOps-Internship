@@ -30,7 +30,7 @@ python check_db.py
 
 # 2. Start the Flask application
 python run.py
-5. **Open in Your Browser**
+# Open in Your Browser 
    - Go to [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
