@@ -1,26 +1,38 @@
+# pylint: disable=too-few-public-methods
+"""Application configuration settings."""
 import os
 
 
 class Config:
-    # This MUST match exactly
+    """Base configuration class."""
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(
         os.path.dirname(__file__), 'instance', 'app.db'
     )
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+
 class DevelopmentConfig(Config):
     """Development configuration."""
     DEBUG = True
-    base_dir = os.path.abspath(os.path.dirname(__file__))
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(base_dir, 'instance', 'app.db')
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(
+        BASE_DIR, 'instance', 'app.db'
+    )
+
 
 class ProductionConfig(Config):
     """Production configuration."""
     DEBUG = False
-    # Add production database URI here
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    SQLALCHEMY_DATABASE_URI = os.environ.get(
+        'DATABASE_URL',
+        'sqlite:///' + os.path.join(
+            os.path.dirname(__file__), 'instance', 'app.db'
+        )
+    )
+
 
 config = {
     'development': DevelopmentConfig,
     'production': ProductionConfig,
     'default': DevelopmentConfig
-} 
+}
