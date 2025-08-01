@@ -7,7 +7,6 @@ import sqlite3
 import os
 import sys
 
-# Add the app directory to the Python path
 sys.path.append(os.path.join(os.path.dirname(__file__), 'app'))
 
 from app import create_app , db
@@ -19,7 +18,6 @@ def check_database():
     print("DATABASE CHECK")
     print("=" * 50)
     
-    # Check with Flask-SQLAlchemy
     app = create_app()
     
     with app.app_context():

@@ -15,5 +15,4 @@ def test_debug_mode_config():
 
 def test_app_run_condition():
     """Test the __main__ condition"""
-    # Verify the app.run() block won't execute during tests
     assert __name__ != '__main__'
