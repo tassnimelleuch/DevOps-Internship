@@ -11,7 +11,7 @@ def app():
     app = create_app() # pylint: disable=redefined-outer-name
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF for testing
+    app.config['WTF_CSRF_ENABLED'] = False  # nosec B104: Disabled for testing
 
     with app.app_context():
         db.create_all()  # Create tables for tests
