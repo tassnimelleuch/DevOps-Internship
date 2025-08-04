@@ -17,7 +17,7 @@ def app():
 # 1. Tests run in isolated environment
 # 2. No actual browser requests are made
 # 3. Test database is temporary
-    test_app.config['WTF_CSRF_ENABLED'] = False 
+    test_app.config['WTF_CSRF_ENABLED'] = False # nosec B104
     db.init_app(test_app)
     with test_app.app_context():
         db.create_all()
@@ -35,6 +35,7 @@ def session(app):  # pylint: disable=redefined-outer-name
         SQLAlchemy: Database session
     """
     with app.app_context():
+        db.session.begin_nested()
         yield db.session
         db.session.rollback()
 def test_task_creation(session):  # pylint: disable=redefined-outer-name
@@ -91,7 +92,7 @@ def test_task_content_nullable(session):  # pylint: disable=redefined-outer-name
     Verifies:
         - Task cannot be created without content
     """
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         task = Task()
         session.add(task)
         session.commit()
