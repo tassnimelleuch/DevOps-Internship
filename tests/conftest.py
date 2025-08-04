@@ -3,15 +3,14 @@ from unittest.mock import patch
 import pytest
 from app import create_app, db
 from app.models import Task
-
 @pytest.fixture(scope='module')
 def app():
     """Create and configure a new app instance for testing."""
-    app = create_app() # pylint: disable=redefined-outer-name
+    app = create_app()  # pylint: disable=redefined-outer-name
     app.config.update({
         'TESTING': True,
         'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
-        'WTF_CSRF_ENABLED': False
+        'WTF_CSRF_ENABLED': False  # nosec B104
     })
     with app.app_context():
         db.create_all()
@@ -27,16 +26,15 @@ def client(app):  # pylint: disable=redefined-outer-name
 @pytest.fixture
 def test_task(app):  # pylint: disable=redefined-outer-name
     """Create a test task in the database."""
-    with app.app_context():
-        task = Task(content="Test task")
-        db.session.add(task)
-        db.session.commit()
-        yield task
-        db.session.delete(task)
-        db.session.commit()
+    task = Task(content="Test task")
+    db.session.add(task)
+    db.session.commit()
+    yield task
+    db.session.delete(task)
+    db.session.commit()
 
 @pytest.fixture
-def mock_summarizer():
+def mock_summarizer():  # pylint: disable=missing-function-docstring
     """Mock the summarizer function for testing."""
     with patch('app.services.summarizer.get_summary') as mock:
         mock.return_value = "Mocked summary"

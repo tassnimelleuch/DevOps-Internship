@@ -1,7 +1,9 @@
 """Unit tests for Task model."""
-import pytest
-from app.models import db, Task
 from flask import Flask
+import pytest
+from sqlalchemy.exc import IntegrityError
+
+from app.models import db, Task
 @pytest.fixture
 def app():
     """Create and configure a new app instance for each test.
@@ -13,10 +15,6 @@ def app():
     test_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     test_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     test_app.config['TESTING'] = True
-# Disabling CSRF protection in tests is safe because:
-# 1. Tests run in isolated environment
-# 2. No actual browser requests are made
-# 3. Test database is temporary
     test_app.config['WTF_CSRF_ENABLED'] = False # nosec B104
     db.init_app(test_app)
     with test_app.app_context():
@@ -92,7 +90,7 @@ def test_task_content_nullable(session):  # pylint: disable=redefined-outer-name
     Verifies:
         - Task cannot be created without content
     """
-    with pytest.raises(ValueError):
+    with pytest.raises(IntegrityError):
         task = Task()
         session.add(task)
         session.commit()

@@ -16,6 +16,6 @@ def summarize():
                         # THE CRITICAL PART - must let exceptions propagate
             summary = get_summary(text)  # This MUST be allowed to raise exceptions
             return jsonify(summary=summary), 200
-        except Exception :  # Catch-all guarantees 500 on any error
+        except Exception :  # pylint: disable=broad-exception-caught
             return jsonify(error="Summarization failed"), 500
     return render_template('summarize.html')
