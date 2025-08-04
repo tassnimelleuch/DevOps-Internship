@@ -13,6 +13,10 @@ def app():
     test_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     test_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     test_app.config['TESTING'] = True
+# Disabling CSRF protection in tests is safe because:
+# 1. Tests run in isolated environment
+# 2. No actual browser requests are made
+# 3. Test database is temporary
     test_app.config['WTF_CSRF_ENABLED'] = False 
     db.init_app(test_app)
     with test_app.app_context():
