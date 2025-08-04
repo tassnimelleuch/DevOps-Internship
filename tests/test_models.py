@@ -13,6 +13,7 @@ def app():
     test_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     test_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     test_app.config['TESTING'] = True
+    test_app.config['WTF_CSRF_ENABLED'] = False 
     db.init_app(test_app)
     with test_app.app_context():
         db.create_all()
