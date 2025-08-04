@@ -1,3 +1,5 @@
+"""Pytest fixtures for the Flask app tests."""
+from unittest.mock import patch
 import pytest
 from app import create_app, db
 from app.models import Task
@@ -5,13 +7,12 @@ from app.models import Task
 @pytest.fixture(scope='module')
 def app():
     """Create and configure a new app instance for testing."""
-    app = create_app()
+    app = create_app() # pylint: disable=redefined-outer-name
     app.config.update({
         'TESTING': True,
         'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
         'WTF_CSRF_ENABLED': False
     })
-    
     with app.app_context():
         db.create_all()
         yield app
@@ -19,12 +20,12 @@ def app():
         db.drop_all()
 
 @pytest.fixture
-def client(app):
+def client(app):  # pylint: disable=redefined-outer-name
     """A test client for the app."""
     return app.test_client()
 
 @pytest.fixture
-def test_task(app):
+def test_task(app):  # pylint: disable=redefined-outer-name
     """Create a test task in the database."""
     with app.app_context():
         task = Task(content="Test task")
