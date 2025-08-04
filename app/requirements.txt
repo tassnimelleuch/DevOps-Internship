@@ -4,5 +4,8 @@ python-dotenv
 transformers>=4.30.0
 torch>=2.0.0
 sentencepiece
+pytest
+pytest-cov
+pytest-flask
 
 

@@ -10,7 +10,8 @@ def summarize():
     if request.method == 'POST':
         try:
             # Get input (both JSON and form data)
-            text = request.json.get('text', '').strip() if request.is_json else request.form.get('text', '').strip()
+            text = (request.json.get('text', '').strip()
+                   if request.is_json else request.form.get('text', '').strip())
             if not text:
                 return jsonify(error="Text required"), 400
                         # THE CRITICAL PART - must let exceptions propagate

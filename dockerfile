@@ -16,4 +16,4 @@ COPY DevOps-Internship/ .
 
 EXPOSE 5000
 
-CMD ["python", "run.py"]
+CMD ["sh", "-c", "python check_db.py && python run.py"]
