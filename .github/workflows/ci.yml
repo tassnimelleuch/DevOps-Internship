@@ -24,10 +24,10 @@ jobs:
     - name: Check database
       run: python check_db.py
 
-- name: Run Pylint
+    - name: Run Pylint
       run: |
         pylint app/ tests/ *.py --exit-zero
-        
+
     - name: Run unit tests
       run: |
         python -m pytest tests/ -v --cov=app --cov-report=xml
