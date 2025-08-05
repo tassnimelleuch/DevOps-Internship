@@ -20,6 +20,7 @@ jobs:
       run: |
         pip install -r app/requirements.txt
         pip install pytest pytest-cov
+        pip install pylint
 
     - name: Check database
       run: python check_db.py
