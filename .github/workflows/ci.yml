@@ -1,11 +1,11 @@
-name: Basic Flask CI
+name: Flask CI Pipeline
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build-and-run:
+  build-test:
     runs-on: ubuntu-latest
     
     steps:
@@ -16,21 +16,21 @@ jobs:
       with:
         python-version: "3.9"
 
-    - name: Install requirements
+    - name: Install dependencies
       run: |
-        pip install -r app/requirements.txt
-        pip install pytest  # Ensure pytest is available
+        pip install -r requirements.txt
+        pip install pytest pytest-cov
 
     - name: Check database
       run: python check_db.py
 
-    - name: Run Unit Tests
+    - name: Run unit tests
       run: |
-        cd app
-        python -m pytest ../tests/unit/ -v
+        python -m pytest tests/ -v --cov=app --cov-report=xml
 
     - name: Start Flask
       run: |
         python app.py &
         sleep 5
         curl -f http://localhost:5000 || echo "App started but no route at /"
+        
