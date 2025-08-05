@@ -16,9 +16,9 @@ jobs:
       with:
         python-version: "3.9"
 
-    - name: Install dependencies
+    - name: Install requirements
       run: |
-        pip install -r requirements.txt
+        pip install -r app/requirements.txt
         pip install pytest pytest-cov
 
     - name: Check database
@@ -33,4 +33,3 @@ jobs:
         python app.py &
         sleep 5
         curl -f http://localhost:5000 || echo "App started but no route at /"
-        
