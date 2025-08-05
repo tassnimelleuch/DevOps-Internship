@@ -17,10 +17,17 @@ jobs:
         python-version: "3.9"
 
     - name: Install requirements
-      run: pip install -r app/requirements.txt
+      run: |
+        pip install -r app/requirements.txt
+        pip install pytest  # Ensure pytest is available
 
     - name: Check database
       run: python check_db.py
+
+    - name: Run Unit Tests
+      run: |
+        cd app
+        python -m pytest ../tests/unit/ -v
 
     - name: Start Flask
       run: |
