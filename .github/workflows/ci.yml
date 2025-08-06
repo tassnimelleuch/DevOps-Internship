@@ -34,6 +34,7 @@ jobs:
         python -m pytest tests/ -v --cov=app --cov-report=xml
     - name: Clear Sonar Cache
       run: rm -rf ~/.sonar/cache
+
     - name: SonarCloud Scan
       uses: SonarSource/sonarqube-scan-action@v5.0.0
       env:
@@ -44,7 +45,9 @@ jobs:
           -Dsonar.projectKey=tassnimelleuch_DevOps-Internship
           -Dsonar.organization=tassnimelleuch
           -Dsonar.branch.name=main
-          -Dsonar.analysis.allowAutomaticAnalysis=false
+          -Dsonar.sources=app  
+          -Dsonar.tests=tests
+          -Dsonar.coverage.exclusions=tests/**,**/__init__.py
 
     - name: Start Flask
       run: |
