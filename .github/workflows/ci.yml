@@ -40,8 +40,9 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       with:
         args: >
-          -Dsonar.projectKey=Tasnim_ELLEUCH_DevOps-Internship
+          -Dsonar.projectKey=tassnimelleuch_DevOps-Internship
           -Dsonar.organization=tassnimelleuch
+          -Dsonar.branch.name=main
 
     - name: Start Flask
       run: |
