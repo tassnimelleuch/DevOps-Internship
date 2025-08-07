@@ -93,3 +93,19 @@ def test_summarize_exception(client):
         response = client.post('/summarize', json={'text': 'fail'})
         assert response.status_code == 500
         assert "error" in response.json
+
+def test_summarize_html_response(client):
+    """Test /summarize with form data triggers HTML response."""
+    with patch('app.routes.get_summary', return_value="HTML summary"):
+        response = client.post('/summarize', data={'text': 'Some text'})
+        assert response.status_code == 200
+
+def test_update_route_404(client):
+    """POST /update/<id> with non-existent ID triggers 404."""
+    response = client.post('/update/9999', data={'content': 'Does not exist'})
+    assert response.status_code == 404
+
+def test_delete_route_404(client):
+    """GET /delete/<id> with non-existent ID triggers 404."""
+    response = client.get('/delete/9999')
+    assert response.status_code == 404
