@@ -54,3 +54,15 @@ jobs:
         python app.py &
         sleep 5
         curl -f http://localhost:5000 || echo "App started but no route at /"
+
+    - name: Build Docker image  
+      run: docker build -t tasnimelleuchenis/my-final-flaskapp:latest -f DevOps-Internship/dockerfile .
+
+    - name: Tag Docker image  
+      run: docker tag tasnimelleuchenis/my-final-flaskapp:latest tasnimelleuchenis/my-final-flaskapp:${{ github.sha }}
+
+    - name: Push Docker image  
+      run: |  
+        docker push tasnimelleuchenis/my-final-flaskapp:latest  
+        docker tag tasnimelleuchenis/my-final-flaskapp:latest tasnimelleuchenis/my-final-flaskapp:${{ github.sha }}  
+        docker push tasnimelleuchenis/my-final-flaskapp:${{ github.sha }}  
