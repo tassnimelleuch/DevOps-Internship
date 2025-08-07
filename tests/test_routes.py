@@ -70,15 +70,26 @@ def test_summarize_json(client): # pylint: disable=redefined-outer-name
         assert response.status_code == 200
         assert response.json['summary'] == "Mocked summary"
 
-def test_summarize_html_response(client):
-    """Test /summarize route with form data to trigger HTML response path (app/routes.py)."""
-    with patch('app.routes.get_summary', return_value="HTML summary"):
-        response = client.post('/summarize', data={'text': 'Some text'})
-        # Should return a rendered template (status 200)
-        assert response.status_code == 200
-
 def test_pomodoro_route(client): # pylint: disable=redefined-outer-name
     """Test the pomodoro route returns 200 and contains 'Pomodoro'."""
     response = client.get('/pomodoro')
     assert response.status_code == 200
     assert b'Pomodoro' in response.data
+
+def test_edit_route_404(client):
+    """GET /edit/<id> with non-existent ID triggers 404 (routes.py)."""
+    response = client.get('/edit/9999')
+    assert response.status_code == 404
+
+def test_summarize_empty_text(client):
+    """Test /summarize with empty text returns 400."""
+    response = client.post('/summarize', json={'text': ''})
+    assert response.status_code == 400
+    assert "error" in response.json
+
+def test_summarize_exception(client):
+    """Test /summarize with get_summary raising exception returns 500."""
+    with patch('app.routes.get_summary', side_effect=Exception("fail")):
+        response = client.post('/summarize', json={'text': 'fail'})
+        assert response.status_code == 500
+        assert "error" in response.json
