@@ -56,7 +56,7 @@ jobs:
         curl -f http://localhost:5000 || echo "App started but no route at /"
 
     - name: Build Docker image  
-      run: docker build -t tasnimelleuchenis/my-final-flaskapp:latest -f DevOps-Internship/dockerfile .
+      run: docker build -t tasnimelleuchenis/my-final-flaskapp:latest -f dockerfile .
 
     - name: Tag Docker image  
       run: docker tag tasnimelleuchenis/my-final-flaskapp:latest tasnimelleuchenis/my-final-flaskapp:${{ github.sha }}
