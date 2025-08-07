@@ -70,6 +70,13 @@ def test_summarize_json(client): # pylint: disable=redefined-outer-name
         assert response.status_code == 200
         assert response.json['summary'] == "Mocked summary"
 
+def test_summarize_html_response(client):
+    """Test /summarize route with form data to trigger HTML response path (app/routes.py)."""
+    with patch('app.routes.get_summary', return_value="HTML summary"):
+        response = client.post('/summarize', data={'text': 'Some text'})
+        # Should return a rendered template (status 200)
+        assert response.status_code == 200
+
 def test_pomodoro_route(client): # pylint: disable=redefined-outer-name
     """Test the pomodoro route returns 200 and contains 'Pomodoro'."""
     response = client.get('/pomodoro')
