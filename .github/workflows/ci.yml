@@ -29,7 +29,9 @@ jobs:
         app = create_app()
         with app.app_context():
             db.create_all()
+            print('Database tables created successfully')
         "
+        ls -la app/instance/
     - name: Run Pylint
       run: |
         pylint app/ tests/ *.py --exit-zero
@@ -57,9 +59,16 @@ jobs:
 
     - name: Start Flask
       run: |
+        python -c "
+        from app import db, create_app
+        app = create_app()
+        with app.app_context():
+            db.create_all()
+        "
         python run.py &
-        sleep 5
+        sleep 10
         curl -f http://localhost:5000 || echo "App started but no route at /"
+        ps aux | grep python
 
     # DOCKER STEPS
     - name: Login to Docker Hub  
