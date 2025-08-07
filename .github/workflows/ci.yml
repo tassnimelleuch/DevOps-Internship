@@ -52,7 +52,7 @@ jobs:
 
     - name: Start Flask
       run: |
-        python app.py &
+        python app/app.py &
         sleep 5
         curl -f http://localhost:5000 || echo "App started but no route at /"
 
