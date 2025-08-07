@@ -22,10 +22,14 @@ jobs:
         pip install pytest pytest-cov
         pip install pylint
 
-    - name: Set up database 
+    - name: Initialize database
       run: |
-        python -c "from app import db, create_app; app = create_app(); with app.app_context(): db.create_all()"
-
+        python -c "
+        from app import db, create_app
+        app = create_app()
+        with app.app_context():
+            db.create_all()
+        "
     - name: Run Pylint
       run: |
         pylint app/ tests/ *.py --exit-zero
