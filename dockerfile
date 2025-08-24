@@ -20,4 +20,4 @@ COPY README.md .
 
 EXPOSE 5000
 
-CMD sh -c "python check_db.py && exec python run.py"
+CMD sh -c "python check_db.py && python run.py"
