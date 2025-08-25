@@ -20,4 +20,6 @@ COPY README.md .
 
 EXPOSE 5000
 
-CMD sh -c "python check_db.py && python -u run.py 2>&1"
+COPY start.sh .
+RUN chmod +x start.sh
+CMD ["./start.sh"]
