@@ -1,12 +1,10 @@
 """Main application entry point for the Flask Todo App."""
 import os
 from app import create_app, db
-from app.models import Task
 
 app = create_app()
 
 if __name__ == '__main__':
-    # Create DB tables before starting the app
     with app.app_context():
         db.create_all()
         print("✅ Database tables ensured before app start")
