@@ -73,5 +73,3 @@ This project includes a complete CI/CD pipeline that automatically:
 - Deploys to Azure cloud platform
 
 ---
-
-Happy productivity! 🎉
